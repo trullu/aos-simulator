@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AoS Damage Simulator</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js per i grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .accordion-button:not(.collapsed) {
+            background-color: #e7f1ff;
+            color: #0c63e4;
+        }
+        .profile-card {
+            border-left: 3px solid #0d6efd;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">⚔️ AoS Damage Simulator</a>
+        </div>
+    </nav>
+
+    <!-- Contenuto principale -->
+    <main class="container py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Simulatore Danni Age of Sigmar</h1>
+            </div>
+        </div>
+
+        <form id="simulation-form">
+            <!-- === PROFILO ATTACCANTE (con sezioni collassabili) === -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">⚔️ Profilo Attaccante</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Profilo 1 - Sempre visibile -->
+                    <div class="profile-card p-3 mb-3">
+                        <h6 class="mb-3">Profilo 1 (principale)</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Units:</label>
+                                <input type="number" class="form-control" id="units_1" value="5" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Attacchi per modello:</label>
+                                <input type="number" class="form-control" id="attacchi_modello_1" value="2" min="1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Campione:</label>
+                                <select class="form-select" id="campione_1">
+                                    <option value="NO" selected>NO</option>
+                                    <option value="SI">SI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Colpire:</label>
+                                <select class="form-select" id="colpire_1">
+                                    <option value="2">2+</option>
+                                    <option value="3" selected>3+</option>
+                                    <option value="4">4+</option>
+                                    <option value="5">5+</option>
+                                    <option value="6">6+</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2">
+                                <label class="form-label">Critico:</label>
+                                <select class="form-select" id="critico_1">
+                                    <option value="Nessuno" selected>Nessuno</option>
+                                    <option value="Mortale">Mortale</option>
+                                    <option value="Auto-Wound">Auto-Wound</option>
+                                    <option value="2 hit">2 hit</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2">
+                                <label class="form-label">Ferire:</label>
+                                <select class="form-select" id="ferire_1">
+                                    <option value="2">2+</option>
+                                    <option value="3">3+</option>
+                                    <option value="4" selected>4+</option>
+                                    <option value="5">5+</option>
+                                    <option value="6">6+</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2">
+                                <label class="form-label">Rend:</label>
+                                <select class="form-select" id="rend_1">
+                                    <option value="0">0</option>
+                                    <option value="-1" selected>-1</option>
+                                    <option value="-2">-2</option>
+                                    <option value="-3">-3</option>
+                                    <option value="-4">-4</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2">
+                                <label class="form-label">Danno:</label>
+                                <select class="form-select" id="danno_1">
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="D3">D3</option>
+                                    <option value="D3+1">D3+1</option>
+                                    <option value="D3+2">D3+2</option>
+                                    <option value="D3+3">D3+3</option>
+                                    <option value="D6">D6</option>
+                                    <option value="D6+1">D6+1</option>
+                                    <option value="D6+2">D6+2</option>
+                                    <option value="D6+3">D6+3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accordion per profili aggiuntivi -->
+                    <div class="accordion" id="accordionProfili">
+                        
+                        <!-- Profilo 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    <span class="fw-bold">Profilo 2 (opzionale)</span>
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionProfili">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Units:</label>
+                                            <input type="number" class="form-control" id="units_2" value="0" min="0">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Attacchi per modello:</label>
+                                            <input type="number" class="form-control" id="attacchi_modello_2" value="2" min="1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Campione:</label>
+                                            <select class="form-select" id="campione_2">
+                                                <option value="NO" selected>NO</option>
+                                                <option value="SI">SI</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Colpire:</label>
+                                            <select class="form-select" id="colpire_2">
+                                                <option value="2">2+</option>
+                                                <option value="3" selected>3+</option>
+                                                <option value="4">4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Critico:</label>
+                                            <select class="form-select" id="critico_2">
+                                                <option value="Nessuno" selected>Nessuno</option>
+                                                <option value="Mortale">Mortale</option>
+                                                <option value="Auto-Wound">Auto-Wound</option>
+                                                <option value="2 hit">2 hit</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Ferire:</label>
+                                            <select class="form-select" id="ferire_2">
+                                                <option value="2">2+</option>
+                                                <option value="3">3+</option>
+                                                <option value="4" selected>4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Rend:</label>
+                                            <select class="form-select" id="rend_2">
+                                                <option value="0">0</option>
+                                                <option value="-1" selected>-1</option>
+                                                <option value="-2">-2</option>
+                                                <option value="-3">-3</option>
+                                                <option value="-4">-4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Danno:</label>
+                                            <select class="form-select" id="danno_2">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="D3">D3</option>
+                                                <option value="D3+1">D3+1</option>
+                                                <option value="D3+2">D3+2</option>
+                                                <option value="D3+3">D3+3</option>
+                                                <option value="D6">D6</option>
+                                                <option value="D6+1">D6+1</option>
+                                                <option value="D6+2">D6+2</option>
+                                                <option value="D6+3">D6+3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profilo 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                    <span class="fw-bold">Profilo 3 (opzionale)</span>
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionProfili">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Units:</label>
+                                            <input type="number" class="form-control" id="units_3" value="0" min="0">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Attacchi per modello:</label>
+                                            <input type="number" class="form-control" id="attacchi_modello_3" value="2" min="1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Campione:</label>
+                                            <select class="form-select" id="campione_3">
+                                                <option value="NO" selected>NO</option>
+                                                <option value="SI">SI</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Colpire:</label>
+                                            <select class="form-select" id="colpire_3">
+                                                <option value="2">2+</option>
+                                                <option value="3" selected>3+</option>
+                                                <option value="4">4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Critico:</label>
+                                            <select class="form-select" id="critico_3">
+                                                <option value="Nessuno" selected>Nessuno</option>
+                                                <option value="Mortale">Mortale</option>
+                                                <option value="Auto-Wound">Auto-Wound</option>
+                                                <option value="2 hit">2 hit</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Ferire:</label>
+                                            <select class="form-select" id="ferire_3">
+                                                <option value="2">2+</option>
+                                                <option value="3">3+</option>
+                                                <option value="4" selected>4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Rend:</label>
+                                            <select class="form-select" id="rend_3">
+                                                <option value="0">0</option>
+                                                <option value="-1" selected>-1</option>
+                                                <option value="-2">-2</option>
+                                                <option value="-3">-3</option>
+                                                <option value="-4">-4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Danno:</label>
+                                            <select class="form-select" id="danno_3">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="D3">D3</option>
+                                                <option value="D3+1">D3+1</option>
+                                                <option value="D3+2">D3+2</option>
+                                                <option value="D3+3">D3+3</option>
+                                                <option value="D6">D6</option>
+                                                <option value="D6+1">D6+1</option>
+                                                <option value="D6+2">D6+2</option>
+                                                <option value="D6+3">D6+3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profilo 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                    <span class="fw-bold">Profilo 4 (opzionale)</span>
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionProfili">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Units:</label>
+                                            <input type="number" class="form-control" id="units_4" value="0" min="0">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Attacchi per modello:</label>
+                                            <input type="number" class="form-control" id="attacchi_modello_4" value="2" min="1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Campione:</label>
+                                            <select class="form-select" id="campione_4">
+                                                <option value="NO" selected>NO</option>
+                                                <option value="SI">SI</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Colpire:</label>
+                                            <select class="form-select" id="colpire_4">
+                                                <option value="2">2+</option>
+                                                <option value="3" selected>3+</option>
+                                                <option value="4">4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Critico:</label>
+                                            <select class="form-select" id="critico_4">
+                                                <option value="Nessuno" selected>Nessuno</option>
+                                                <option value="Mortale">Mortale</option>
+                                                <option value="Auto-Wound">Auto-Wound</option>
+                                                <option value="2 hit">2 hit</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Ferire:</label>
+                                            <select class="form-select" id="ferire_4">
+                                                <option value="2">2+</option>
+                                                <option value="3">3+</option>
+                                                <option value="4" selected>4+</option>
+                                                <option value="5">5+</option>
+                                                <option value="6">6+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Rend:</label>
+                                            <select class="form-select" id="rend_4">
+                                                <option value="0">0</option>
+                                                <option value="-1" selected>-1</option>
+                                                <option value="-2">-2</option>
+                                                <option value="-3">-3</option>
+                                                <option value="-4">-4</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-2">
+                                            <label class="form-label">Danno:</label>
+                                            <select class="form-select" id="danno_4">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="D3">D3</option>
+                                                <option value="D3+1">D3+1</option>
+                                                <option value="D3+2">D3+2</option>
+                                                <option value="D3+3">D3+3</option>
+                                                <option value="D6">D6</option>
+                                                <option value="D6+1">D6+1</option>
+                                                <option value="D6+2">D6+2</option>
+                                                <option value="D6+3">D6+3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- === PROFILO DIFENSORE === -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">🛡️ Profilo Difensore</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="save" class="form-label">Salvezza (Save):</label>
+                            <select class="form-select" id="save" name="save">
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4" selected>4+</option>
+                                <option value="5">5+</option>
+                                <option value="6">6+</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ward" class="form-label">Ward:</label>
+                            <select class="form-select" id="ward" name="ward">
+                                <option value="NO" selected>Nessuno</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                                <option value="6">6+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- === OBIETTIVO NEMICO === -->
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">💀 Obiettivo Nemico</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="ferite_nemiche" class="form-label">Ferite totali dell'unità nemica:</label>
+                            <input type="number" class="form-control" id="ferite_nemiche" value="10" min="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottone di simulazione -->
+            <div class="text-center mb-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    🎲 AVVIA SIMULAZIONE (2000 lanci)
+                </button>
+            </div>
+        </form>
+
+        <!-- Area risultati (inizialmente nascosta) -->
+        <div id="results" class="mt-5" style="display: none;">
+            <h2 class="mb-4">📊 Risultati Simulazione</h2>
+            
+            <!-- Statistiche -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3 id="media-danni">0</h3>
+                            <p class="mb-0">Media danni</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-warning">
+                        <div class="card-body text-center">
+                            <h3 id="max-danni">0</h3>
+                            <p class="mb-0">Massimo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-info">
+                        <div class="card-body text-center">
+                            <h3 id="min-danni">0</h3>
+                            <p class="mb-0">Minimo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Percentuale eliminazione -->
+            <div class="alert alert-danger mb-4" role="alert">
+                <h4 class="alert-heading">💀 Probabilità di eliminazione totale</h4>
+                <p id="perc-eliminazione" class="display-4">0%</p>
+                <p id="conteggio-eliminazione" class="mb-0"></p>
+            </div>
+
+            <!-- Grafico -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📈 Distribuzione percentuale danni</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="danniChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spinner di caricamento -->
+        <div id="loading" class="text-center my-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="mt-2">Esecuzione di 2000 simulazioni...</p>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript personalizzato -->
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
