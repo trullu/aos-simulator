@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import os
 
 app = FastAPI()
 
@@ -57,6 +58,9 @@ def calcola_danno(tipo_danno):
         return 1
 
 def simula_profilo(attacchi, colpire_su, tipo_critico, ferire_su, rend, danno_input, save_su):
+    # Converti il tipo critico in maiuscolo per sicurezza
+    tipo_critico = tipo_critico.upper().strip()
+    
     successi_hit = 0
     critici_mortali = 0
     critici_2colpi = 0
@@ -70,9 +74,9 @@ def simula_profilo(attacchi, colpire_su, tipo_critico, ferire_su, rend, danno_in
             if hit_roll == 6:
                 if tipo_critico == "MORTALE":
                     critici_mortali += 1
-                elif tipo_critico == "2 hit":
+                elif tipo_critico == "2 HIT":
                     critici_2colpi += 1
-                elif tipo_critico == "AUTO-WOUND":
+                elif tipo_critico == "AUTO-WOUND" or tipo_critico == "AUTO WOUND":
                     critici_autowound += 1
     
     hit_normali = successi_hit - critici_mortali - critici_2colpi - critici_autowound
@@ -126,10 +130,24 @@ async def simula(data: dict = Body(...)):
     
     profili = []
     for p in range(1, 5):
+        # Leggi il valore del critico e normalizzalo
+        valore_critico = data.get(f"critico_p{p}", "")
+        if valore_critico:
+            valore_critico = valore_critico.upper().strip()
+            # Mappa i valori corretti
+            if valore_critico == "MORTALE":
+                valore_critico = "MORTALE"
+            elif valore_critico == "AUTO-WOUND" or valore_critico == "AUTO WOUND":
+                valore_critico = "AUTO-WOUND"
+            elif valore_critico == "2 HIT":
+                valore_critico = "2 HIT"
+            else:
+                valore_critico = ""
+        
         profilo = {
             "attacchi": data.get(f"attacchi_p{p}", 0),
             "colpire": data.get(f"colpire_p{p}", 7),
-            "critico": data.get(f"critico_p{p}", ""),
+            "critico": valore_critico,
             "ferire": data.get(f"ferire_p{p}", 7),
             "rend": data.get(f"rend_p{p}", 0),
             "danno": data.get(f"danno_p{p}", "1")
@@ -183,4 +201,5 @@ async def simula(data: dict = Body(...)):
     return response
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
