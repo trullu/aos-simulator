@@ -57,7 +57,7 @@ def calcola_danno(tipo_danno):
     except:
         return 1
 
-def simula_profilo(attacchi, colpire_su, tipo_critico, ferire_su, rend, danno_input, save_su):
+def simula_profilo(attacchi, colpire_su, tipo_critico, soglia_critico, ferire_su, rend, danno_input, save_su):
     # Converti il tipo critico in maiuscolo per sicurezza
     tipo_critico = tipo_critico.upper().strip()
     
@@ -71,7 +71,8 @@ def simula_profilo(attacchi, colpire_su, tipo_critico, ferire_su, rend, danno_in
         if hit_roll >= colpire_su:
             successi_hit += 1
             
-            if hit_roll == 6:
+            # Usa soglia_critico per determinare se è un critico
+            if hit_roll >= soglia_critico:
                 if tipo_critico == "MORTALE":
                     critici_mortali += 1
                 elif tipo_critico == "2 HIT":
@@ -134,7 +135,6 @@ async def simula(data: dict = Body(...)):
         valore_critico = data.get(f"critico_p{p}", "")
         if valore_critico:
             valore_critico = valore_critico.upper().strip()
-            # Mappa i valori corretti
             if valore_critico == "MORTALE":
                 valore_critico = "MORTALE"
             elif valore_critico == "AUTO-WOUND" or valore_critico == "AUTO WOUND":
@@ -144,10 +144,14 @@ async def simula(data: dict = Body(...)):
             else:
                 valore_critico = ""
         
+        # Leggi la soglia del critico (default 6 se non presente)
+        soglia_critico = data.get(f"soglia_critico_p{p}", 6)
+        
         profilo = {
             "attacchi": data.get(f"attacchi_p{p}", 0),
             "colpire": data.get(f"colpire_p{p}", 7),
             "critico": valore_critico,
+            "soglia_critico": soglia_critico,
             "ferire": data.get(f"ferire_p{p}", 7),
             "rend": data.get(f"rend_p{p}", 0),
             "danno": data.get(f"danno_p{p}", "1")
@@ -164,6 +168,7 @@ async def simula(data: dict = Body(...)):
                     p["attacchi"],
                     p["colpire"],
                     p["critico"],
+                    p["soglia_critico"],
                     p["ferire"],
                     p["rend"],
                     p["danno"],

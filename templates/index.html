@@ -47,22 +47,22 @@
                     <div class="profile-card p-3 mb-3">
                         <h6 class="mb-3">Profilo 1 (principale)</h6>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label">Units:</label>
                                 <input type="number" class="form-control" id="units_1" value="5" min="0">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Attacchi per modello:</label>
+                            <div class="col-md-2">
+                                <label class="form-label">Attacchi/mod:</label>
                                 <input type="number" class="form-control" id="attacchi_modello_1" value="2" min="1">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label">Campione:</label>
                                 <select class="form-select" id="campione_1">
                                     <option value="NO" selected>NO</option>
                                     <option value="SI">SI</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label">Colpire:</label>
                                 <select class="form-select" id="colpire_1">
                                     <option value="2">2+</option>
@@ -72,7 +72,7 @@
                                     <option value="6">6+</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-2">
                                 <label class="form-label">Critico:</label>
                                 <select class="form-select" id="critico_1">
                                     <option value="Nessuno" selected>Nessuno</option>
@@ -81,7 +81,14 @@
                                     <option value="2 hit">2 hit</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-2">
+                                <label class="form-label">Soglia:</label>
+                                <select class="form-select" id="soglia_critico_1">
+                                    <option value="6" selected>6+</option>
+                                    <option value="5">5+</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mt-2">
                                 <label class="form-label">Ferire:</label>
                                 <select class="form-select" id="ferire_1">
                                     <option value="2">2+</option>
@@ -91,7 +98,7 @@
                                     <option value="6">6+</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-2 mt-2">
                                 <label class="form-label">Rend:</label>
                                 <select class="form-select" id="rend_1">
                                     <option value="0">0</option>
@@ -101,7 +108,7 @@
                                     <option value="-4">-4</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-2 mt-2">
                                 <label class="form-label">Danno:</label>
                                 <select class="form-select" id="danno_1">
                                     <option value="1">1</option>
@@ -138,22 +145,22 @@
                             <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Units:</label>
                                             <input type="number" class="form-control" id="units_2" value="0" min="0">
                                         </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Attacchi per modello:</label>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Attacchi/mod:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_2" value="2" min="1">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Campione:</label>
                                             <select class="form-select" id="campione_2">
                                                 <option value="NO" selected>NO</option>
                                                 <option value="SI">SI</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Colpire:</label>
                                             <select class="form-select" id="colpire_2">
                                                 <option value="2">2+</option>
@@ -163,7 +170,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
                                             <label class="form-label">Critico:</label>
                                             <select class="form-select" id="critico_2">
                                                 <option value="Nessuno" selected>Nessuno</option>
@@ -172,7 +179,14 @@
                                                 <option value="2 hit">2 hit</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
+                                            <label class="form-label">Soglia:</label>
+                                            <select class="form-select" id="soglia_critico_2">
+                                                <option value="6" selected>6+</option>
+                                                <option value="5">5+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Ferire:</label>
                                             <select class="form-select" id="ferire_2">
                                                 <option value="2">2+</option>
@@ -182,7 +196,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Rend:</label>
                                             <select class="form-select" id="rend_2">
                                                 <option value="0">0</option>
@@ -192,7 +206,7 @@
                                                 <option value="-4">-4</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Danno:</label>
                                             <select class="form-select" id="danno_2">
                                                 <option value="1">1</option>
@@ -228,22 +242,22 @@
                             <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Units:</label>
                                             <input type="number" class="form-control" id="units_3" value="0" min="0">
                                         </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Attacchi per modello:</label>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Attacchi/mod:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_3" value="2" min="1">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Campione:</label>
                                             <select class="form-select" id="campione_3">
                                                 <option value="NO" selected>NO</option>
                                                 <option value="SI">SI</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Colpire:</label>
                                             <select class="form-select" id="colpire_3">
                                                 <option value="2">2+</option>
@@ -253,7 +267,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
                                             <label class="form-label">Critico:</label>
                                             <select class="form-select" id="critico_3">
                                                 <option value="Nessuno" selected>Nessuno</option>
@@ -262,7 +276,14 @@
                                                 <option value="2 hit">2 hit</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
+                                            <label class="form-label">Soglia:</label>
+                                            <select class="form-select" id="soglia_critico_3">
+                                                <option value="6" selected>6+</option>
+                                                <option value="5">5+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Ferire:</label>
                                             <select class="form-select" id="ferire_3">
                                                 <option value="2">2+</option>
@@ -272,7 +293,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Rend:</label>
                                             <select class="form-select" id="rend_3">
                                                 <option value="0">0</option>
@@ -282,7 +303,7 @@
                                                 <option value="-4">-4</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Danno:</label>
                                             <select class="form-select" id="danno_3">
                                                 <option value="1">1</option>
@@ -318,22 +339,22 @@
                             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Units:</label>
                                             <input type="number" class="form-control" id="units_4" value="0" min="0">
                                         </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Attacchi per modello:</label>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Attacchi/mod:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_4" value="2" min="1">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Campione:</label>
                                             <select class="form-select" id="campione_4">
                                                 <option value="NO" selected>NO</option>
                                                 <option value="SI">SI</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <label class="form-label">Colpire:</label>
                                             <select class="form-select" id="colpire_4">
                                                 <option value="2">2+</option>
@@ -343,7 +364,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
                                             <label class="form-label">Critico:</label>
                                             <select class="form-select" id="critico_4">
                                                 <option value="Nessuno" selected>Nessuno</option>
@@ -352,7 +373,14 @@
                                                 <option value="2 hit">2 hit</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2">
+                                            <label class="form-label">Soglia:</label>
+                                            <select class="form-select" id="soglia_critico_4">
+                                                <option value="6" selected>6+</option>
+                                                <option value="5">5+</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Ferire:</label>
                                             <select class="form-select" id="ferire_4">
                                                 <option value="2">2+</option>
@@ -362,7 +390,7 @@
                                                 <option value="6">6+</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Rend:</label>
                                             <select class="form-select" id="rend_4">
                                                 <option value="0">0</option>
@@ -372,7 +400,7 @@
                                                 <option value="-4">-4</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mt-2">
+                                        <div class="col-md-2 mt-2">
                                             <label class="form-label">Danno:</label>
                                             <select class="form-select" id="danno_4">
                                                 <option value="1">1</option>

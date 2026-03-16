@@ -72,15 +72,29 @@ document.addEventListener('DOMContentLoaded', function() {
     function createChart(distribuzione) {
         const ctx = document.getElementById('danniChart').getContext('2d');
         
+        // Trova il valore massimo di danno che ha una frequenza > 0
         const labels = [];
         const data = [];
-        for (let i = 0; i <= 50; i++) {
+        let maxDanno = 0;
+        
+        // Estrai tutte le chiavi (danni) dalla distribuzione e trova il massimo
+        const danni = Object.keys(distribuzione).map(Number);
+        if (danni.length > 0) {
+            maxDanno = Math.max(...danni);
+        }
+        
+        // Crea l'array di etichette da 0 a maxDanno
+        for (let i = 0; i <= maxDanno; i++) {
             labels.push(i.toString());
             data.push(distribuzione[i] ? (distribuzione[i] / 2000 * 100) : 0);
         }
         
-        if (chartInstance) chartInstance.destroy();
+        // Distruggi grafico esistente se presente
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
         
+        // Crea nuovo grafico
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -96,8 +110,28 @@ document.addEventListener('DOMContentLoaded', function() {
             options: {
                 responsive: true,
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Percentuale (%)' } },
-                    x: { title: { display: true, text: 'Danni inflitti' } }
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Percentuale (%)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Danni inflitti'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.toFixed(2) + '%';
+                            }
+                        }
+                    }
                 }
             }
         });
