@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data[`attacchi_p${p}`] = attacchiTotali;
             data[`colpire_p${p}`] = parseInt(document.getElementById(`colpire_${p}`).value);
             data[`critico_p${p}`] = document.getElementById(`critico_${p}`).value;
+            data[`soglia_critico_p${p}`] = parseInt(document.getElementById(`soglia_critico_${p}`).value);
             data[`ferire_p${p}`] = parseInt(document.getElementById(`ferire_${p}`).value);
             data[`rend_p${p}`] = parseInt(document.getElementById(`rend_${p}`).value);
             data[`danno_p${p}`] = document.getElementById(`danno_${p}`).value;
@@ -136,4 +137,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+});
+
+// === PULSANTE AZZERA UNITS ===
+document.getElementById('reset-units').addEventListener('click', function() {
+    // Azzera UNITS per tutti e 4 i profili
+    for (let p = 1; p <= 4; p++) {
+        const unitsField = document.getElementById(`units_${p}`);
+        if (unitsField) {
+            unitsField.value = 0;
+        }
+    }
+    
+    // Feedback visivo
+    this.classList.add('btn-success');
+    this.classList.remove('btn-secondary');
+    this.innerHTML = '✅ UNITS AZZERATE';
+    
+    // Dopo 2 secondi, ripristina il pulsante originale
+    setTimeout(() => {
+        this.classList.remove('btn-success');
+        this.classList.add('btn-secondary');
+        this.innerHTML = '🔄 AZZERA UNITS';
+    }, 2000);
 });
