@@ -1,0 +1,358 @@
+/* ============================================
+   TEMA SCURO WARHAMMER - AoS Damage Simulator
+   ============================================ */
+
+/* Variabili colore tema */
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-card: #1e1e1e;
+    --bg-card-header: #2a2a2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --gold-primary: #bf9b5c;
+    --gold-secondary: #8b7355;
+    --blood-red: #8b0000;
+    --blood-red-light: #a52a2a;
+    --border-color: #3a3a3a;
+    --border-gold: #bf9b5c;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-gold: rgba(191, 155, 92, 0.2);
+}
+
+/* ===== BACKGROUND PRINCIPALE ===== */
+body {
+    background-color: var(--bg-primary);
+    background-image: 
+        linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%23333333" stroke-width="0.5" stroke-dasharray="5,5"/></svg>');
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%) !important;
+    border-bottom: 2px solid var(--gold-primary);
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.navbar-brand {
+    color: var(--gold-primary) !important;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+    color: #d4b37c !important;
+    text-shadow: 0 0 10px var(--shadow-gold);
+}
+
+/* ===== CARD PRINCIPALI ===== */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--bg-card-header) 0%, var(--bg-secondary) 100%);
+    border-bottom: 2px solid var(--gold-primary);
+    color: var(--gold-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 20px;
+}
+
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%) !important;
+}
+
+.card-header.bg-secondary {
+    background: linear-gradient(135deg, #333333 0%, #222222 100%) !important;
+}
+
+.card-header.bg-danger {
+    background: linear-gradient(135deg, var(--blood-red) 0%, #5c0000 100%) !important;
+    border-bottom: 2px solid var(--gold-primary);
+}
+
+.card-body {
+    padding: 20px;
+    background-color: var(--bg-card);
+}
+
+/* ===== PROFILO CARD (quello con bordo blu) ===== */
+.profile-card {
+    background-color: #252525;
+    border-left: 4px solid var(--gold-primary) !important;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.profile-card h6 {
+    color: var(--gold-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+/* ===== FORM ELEMENTI ===== */
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.form-control, .form-select {
+    background-color: #2a2a2a;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 4px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #333333;
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 3px var(--shadow-gold);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.form-control:hover, .form-select:hover {
+    border-color: var(--gold-secondary);
+}
+
+/* ===== PULSANTI ===== */
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(30deg);
+    transition: transform 0.5s ease;
+}
+
+.btn:hover::after {
+    transform: rotate(30deg) translate(50%, 50%);
+}
+
+/* Pulsante Primario (Avvia Simulazione) */
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold-primary) 0%, #8b7355 100%);
+    color: #0a0a0a;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(191, 155, 92, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d4b37c 0%, #9c8363 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(191, 155, 92, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Pulsante Secondario (Azzeramento) */
+.btn-secondary {
+    background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+    color: var(--gold-primary);
+    border: 1px solid var(--gold-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+    color: #d4b37c;
+    border-color: #d4b37c;
+    transform: translateY(-2px);
+}
+
+/* Pulsante Successo (feedback azzeramento) */
+.btn-success {
+    background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 100%);
+    color: #d4b37c;
+    border: 1px solid var(--gold-primary);
+}
+
+/* ===== STATISTICHE CARDS ===== */
+.card.bg-success, .card.bg-warning, .card.bg-info {
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.card.bg-success::before, .card.bg-warning::before, .card.bg-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.card.bg-success {
+    background: linear-gradient(135deg, #1a3a1a 0%, #0a2a0a 100%) !important;
+}
+
+.card.bg-warning {
+    background: linear-gradient(135deg, #8b7355 0%, #6b5345 100%) !important;
+}
+
+.card.bg-info {
+    background: linear-gradient(135deg, #2a5a6a 0%, #1a3a4a 100%) !important;
+}
+
+.card h3 {
+    color: var(--gold-primary) !important;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.card p {
+    color: var(--text-primary) !important;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== ALERT DI ELIMINAZIONE ===== */
+.alert-danger {
+    background: linear-gradient(135deg, #5a1a1a 0%, #3a0a0a 100%);
+    border: 2px solid var(--blood-red-light);
+    color: var(--text-primary);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(139, 0, 0, 0.3);
+}
+
+.alert-danger .display-4 {
+    color: var(--blood-red-light);
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+/* ===== ACCORDION ===== */
+.accordion-item {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background-color: #252525;
+}
+
+.accordion-button {
+    background-color: #252525;
+    color: var(--gold-primary);
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #2a2a2a;
+    color: #d4b37c;
+    box-shadow: inset 0 -1px 0 var(--border-gold);
+}
+
+.accordion-button::after {
+    filter: invert(0.8) sepia(1) hue-rotate(5deg);
+}
+
+.accordion-button:hover {
+    background-color: #2a2a2a;
+    color: #d4b37c;
+}
+
+.accordion-body {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ===== GRAFICO ===== */
+#danniChart {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+}
+
+/* ===== FOOTER (se aggiunto) ===== */
+footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    border-top: 2px solid var(--gold-primary);
+    color: var(--text-secondary);
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+/* ===== SCROLLBAR PERSONALIZZATA ===== */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold-secondary);
+    border-radius: 6px;
+    border: 2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-primary);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .card h3 {
+        font-size: 2rem;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
