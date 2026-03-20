@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsDiv = document.getElementById('results');
     const loadingDiv = document.getElementById('loading');
     let chartInstance = null;
+    let showAverageLine = true;  // Controllo per la linea della media
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -54,9 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateResults(result, feriteNemiche) {
         resultsDiv.style.display = 'block';
         
-        document.getElementById('media-danni').textContent = result.statistiche.media;
-        document.getElementById('max-danni').textContent = result.statistiche.massimo;
-        document.getElementById('min-danni').textContent = result.statistiche.minimo;
+        const media = result.statistiche.media;
+        const massimo = result.statistiche.massimo;
+        const minimo = result.statistiche.minimo;
+        
+        document.getElementById('media-danni').textContent = media;
+        document.getElementById('max-danni').textContent = massimo;
+        document.getElementById('min-danni').textContent = minimo;
         
         const distribuzione = result.distribuzione;
         let eliminazioni = 0;
@@ -67,10 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('perc-eliminazione').textContent = percEliminazione + '%';
         document.getElementById('conteggio-eliminazione').textContent = `(${eliminazioni}/2000)`;
         
-        createChart(distribuzione);
+        // Passa la media al grafico per la linea
+        createChart(distribuzione, media);
+        
+        // Aggiungi il pulsante di download dopo che il grafico è visibile
+        addDownloadButton();
     }
     
-    function createChart(distribuzione) {
+    function createChart(distribuzione, mediaDanni = null) {
         const ctx = document.getElementById('danniChart').getContext('2d');
         
         // Trova il valore massimo di danno che ha una frequenza > 0
@@ -87,7 +96,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Crea l'array di etichette da 0 a maxDanno
         for (let i = 0; i <= maxDanno; i++) {
             labels.push(i.toString());
-            data.push(distribuzione[i] ? (distribuzione[i] / 2000 * 100) : 0);
+            const frequenza = distribuzione[i] || 0;
+            const percentuale = (frequenza / 2000 * 100);
+            data.push({
+                y: percentuale,
+                frequenza: frequenza,
+                danno: i
+            });
         }
         
         // Distruggi grafico esistente se presente
@@ -95,47 +110,164 @@ document.addEventListener('DOMContentLoaded', function() {
             chartInstance.destroy();
         }
         
+        // Prepara i dataset
+        const datasets = [{
+            label: 'Percentuale (%)',
+            data: data,
+            backgroundColor: 'rgba(191, 155, 92, 0.7)',  // Oro Warhammer
+            borderColor: 'rgba(191, 155, 92, 1)',
+            borderWidth: 1,
+            borderRadius: 4,
+            barPercentage: 0.9,
+            categoryPercentage: 0.8
+        }];
+        
+        // Aggiungi la linea della media se richiesta e se abbiamo il valore
+        if (showAverageLine && mediaDanni !== null && mediaDanni > 0) {
+            datasets.push({
+                label: `Media: ${mediaDanni.toFixed(2)} danni`,
+                data: Array(data.length).fill(mediaDanni),
+                type: 'line',
+                borderColor: 'rgba(220, 53, 69, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                tension: 0.1
+            });
+        }
+        
         // Crea nuovo grafico
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Percentuale (%)',
-                    data: data,
-                    backgroundColor: 'rgba(0, 102, 204, 0.7)',
-                    borderColor: 'rgba(0, 102, 204, 1)',
-                    borderWidth: 1
-                }]
+                datasets: datasets
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return `Danno: ${context[0].label}`;
+                            },
+                            label: function(context) {
+                                let label = '';
+                                if (context.dataset.type === 'line') {
+                                    return context.dataset.label;
+                                }
+                                const raw = context.raw;
+                                if (raw.frequenza !== undefined) {
+                                    return [
+                                        `Percentuale: ${raw.y.toFixed(2)}%`,
+                                        `Frequenza: ${raw.frequenza} volte`,
+                                        `(su 2000 simulazioni)`
+                                    ];
+                                }
+                                return `${context.raw.y.toFixed(2)}%`;
+                            },
+                            footer: function(tooltipItems) {
+                                const raw = tooltipItems[0].raw;
+                                if (raw && raw.danno !== undefined && raw.frequenza > 0) {
+                                    return `⬇️ ${raw.frequenza} volte su 2000`;
+                                }
+                                return '';
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#bf9b5c',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#bf9b5c',
+                        borderWidth: 1
+                    },
+                    legend: {
+                        labels: {
+                            color: '#e0e0e0',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        position: 'top'
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Percentuale (%)'
+                            text: 'Percentuale (%)',
+                            color: '#bf9b5c',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(191, 155, 92, 0.2)'
+                        },
+                        ticks: {
+                            color: '#e0e0e0',
+                            callback: function(value) {
+                                return value.toFixed(1) + '%';
+                            }
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Danni inflitti'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.raw.toFixed(2) + '%';
+                            text: 'Danni inflitti',
+                            color: '#bf9b5c',
+                            font: {
+                                weight: 'bold',
+                                size: 14
                             }
+                        },
+                        grid: {
+                            color: 'rgba(191, 155, 92, 0.2)'
+                        },
+                        ticks: {
+                            color: '#e0e0e0',
+                            stepSize: 2,
+                            autoSkip: true,
+                            maxRotation: 45,
+                            minRotation: 0
                         }
                     }
                 }
             }
         });
+    }
+    
+    // === PULSANTE PER SCARICARE IL GRAFICO ===
+    function addDownloadButton() {
+        // Cerca la card che contiene il grafico
+        const chartCard = document.querySelector('.card:has(#danniChart)');
+        if (chartCard && !document.getElementById('download-chart')) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'download-btn-container text-end mt-2';
+            buttonContainer.innerHTML = `
+                <button id="download-chart" class="btn btn-sm btn-outline-gold">
+                    📸 Scarica grafico come PNG
+                </button>
+            `;
+            chartCard.querySelector('.card-body').appendChild(buttonContainer);
+            
+            // Aggiungi l'evento al pulsante
+            document.getElementById('download-chart').addEventListener('click', function() {
+                const canvas = document.getElementById('danniChart');
+                const link = document.createElement('a');
+                link.download = 'aos_damage_distribution.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
     }
 });
 
