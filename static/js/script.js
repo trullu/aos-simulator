@@ -98,11 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels.push(i.toString());
             const frequenza = distribuzione[i] || 0;
             const percentuale = (frequenza / 2000 * 100);
-            data.push({
-                y: percentuale,
-                frequenza: frequenza,
-                danno: i
-            });
+            data.push(percentuale);
         }
         
         // Distruggi grafico esistente se presente
@@ -110,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chartInstance.destroy();
         }
         
-        // Prepara i dataset
+        // Prepara i dataset - INIZIALMENTE SOLO LE BARRE
         const datasets = [{
             label: 'Percentuale (%)',
             data: data,
@@ -122,19 +118,23 @@ document.addEventListener('DOMContentLoaded', function() {
             categoryPercentage: 0.8
         }];
         
-        // Aggiungi la linea della media se richiesta e se abbiamo il valore
+        // Aggiungi la linea della media SEPARATAMENTE se richiesta e se abbiamo il valore
         if (showAverageLine && mediaDanni !== null && mediaDanni > 0) {
+            // Crea un array con lo stesso numero di elementi di data, tutti uguali alla media
+            const mediaData = Array(data.length).fill(mediaDanni);
             datasets.push({
                 label: `Media: ${mediaDanni.toFixed(2)} danni`,
-                data: Array(data.length).fill(mediaDanni),
+                data: mediaData,
                 type: 'line',
                 borderColor: 'rgba(220, 53, 69, 0.8)',
+                backgroundColor: 'transparent',
                 borderWidth: 2,
                 borderDash: [5, 5],
                 fill: false,
                 pointRadius: 0,
                 pointHoverRadius: 0,
-                tension: 0.1
+                tension: 0.1,
+                order: 2  // Assicura che la linea sia sopra le barre
             });
         }
         
@@ -159,24 +159,28 @@ document.addEventListener('DOMContentLoaded', function() {
                                 return `Danno: ${context[0].label}`;
                             },
                             label: function(context) {
-                                let label = '';
+                                // Se è la linea della media, mostra solo quel valore
                                 if (context.dataset.type === 'line') {
-                                    return context.dataset.label;
+                                    return `${context.dataset.label}: ${context.raw.toFixed(2)} danni`;
                                 }
-                                const raw = context.raw;
-                                if (raw.frequenza !== undefined) {
-                                    return [
-                                        `Percentuale: ${raw.y.toFixed(2)}%`,
-                                        `Frequenza: ${raw.frequenza} volte`,
-                                        `(su 2000 simulazioni)`
-                                    ];
-                                }
-                                return `${context.raw.y.toFixed(2)}%`;
+                                // Per le barre, mostra percentuale e frequenza
+                                const danno = parseInt(context.label);
+                                const frequenza = distribuzione[danno] || 0;
+                                return [
+                                    `Percentuale: ${context.raw.toFixed(2)}%`,
+                                    `Frequenza: ${frequenza} volte`,
+                                    `(su 2000 simulazioni)`
+                                ];
                             },
                             footer: function(tooltipItems) {
-                                const raw = tooltipItems[0].raw;
-                                if (raw && raw.danno !== undefined && raw.frequenza > 0) {
-                                    return `⬇️ ${raw.frequenza} volte su 2000`;
+                                // Solo per le barre, aggiungi un'info extra
+                                const item = tooltipItems[0];
+                                if (item.dataset.type !== 'line') {
+                                    const danno = parseInt(item.label);
+                                    const frequenza = distribuzione[danno] || 0;
+                                    if (frequenza > 0) {
+                                        return `⬇️ ${frequenza} volte su 2000`;
+                                    }
                                 }
                                 return '';
                             }
