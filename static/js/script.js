@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
         } catch (error) {
             console.error('Errore:', error);
-            alert('Errore durante la simulazione.');
+            alert('Error during simulation.');
         } finally {
             loadingDiv.style.display = 'none';
         }
@@ -137,10 +137,10 @@ document.getElementById('reset-units').addEventListener('click', function() {
     }
     this.classList.add('btn-success');
     this.classList.remove('btn-secondary');
-    this.innerHTML = '✅ UNITS AZZERATE';
+    this.innerHTML = '✅ UNITS RESET';
     setTimeout(() => {
         this.classList.remove('btn-success');
         this.classList.add('btn-secondary');
-        this.innerHTML = '🔄 AZZERA UNITS';
+        this.innerHTML = '🔄 RESET UNITS';
     }, 2000);
 });
