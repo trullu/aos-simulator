@@ -1,10 +1,11 @@
 import random
+import os
 from fastapi import FastAPI, Body, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-import os
+
 
 app = FastAPI()
 
@@ -206,6 +207,7 @@ async def simula(data: dict = Body(...)):
     return response
 
 if __name__ == "__main__":
+    import os
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
 
