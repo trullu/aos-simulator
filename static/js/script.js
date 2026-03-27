@@ -159,44 +159,62 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // === PULSANTE PER ESPORTARE IL GRAFICO ===
-    function addExportButton() {
-        const chartCard = document.querySelector('.card:has(#danniChart)');
-        if (chartCard && !document.getElementById('export-chart')) {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.className = 'download-btn-container text-end mt-2';
-            buttonContainer.innerHTML = `
-                <button id="export-chart" class="btn btn-sm btn-outline-gold">
-                    📸 Export Chart as PNG
-                </button>
-            `;
-            chartCard.querySelector('.card-body').appendChild(buttonContainer);
+function addExportButton() {
+    const chartCard = document.querySelector('.card:has(#danniChart)');
+    if (chartCard && !document.getElementById('export-chart')) {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'download-btn-container text-end mt-2';
+        buttonContainer.innerHTML = `
+            <button id="export-chart" class="btn btn-sm btn-outline-gold" style="display: inline-flex; align-items: center; gap: 8px;">
+                <span>📸</span> Export Chart as PNG
+            </button>
+        `;
+        chartCard.querySelector('.card-body').appendChild(buttonContainer);
+        
+        document.getElementById('export-chart').addEventListener('click', function() {
+            const canvas = document.getElementById('danniChart');
             
-            document.getElementById('export-chart').addEventListener('click', function() {
-                const canvas = document.getElementById('danniChart');
+            // Salva lo stato corrente del canvas
+            const originalBackground = canvas.style.backgroundColor;
+            const originalPadding = canvas.style.padding;
+            const originalBorder = canvas.style.border;
+            
+            // Crea un canvas temporaneo per l'esportazione (assicura sfondo nero)
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            // Imposta dimensioni identiche al canvas originale
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            
+            // Riempie con sfondo nero
+            tempCtx.fillStyle = '#0a0a0a';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            // Disegna il canvas originale sopra
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            // Forza stile per l'esportazione
+            canvas.style.backgroundColor = '#0a0a0a';
+            canvas.style.padding = '15px';
+            canvas.style.border = '1px solid #3a3a3a';
+            
+            // Crea l'immagine dal canvas temporaneo (garantisce sfondo nero)
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.download = 'aos_damage_distribution.png';
+                // Usa il canvas temporaneo per l'esportazione
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
                 
-                // Salva lo stato corrente del canvas
-                const originalBackground = canvas.style.backgroundColor;
-                const originalPadding = canvas.style.padding;
-                
-                // Applica stile per l'esportazione (sfondo nero, testo bianco)
-                canvas.style.backgroundColor = '#0a0a0a';
-                canvas.style.padding = '15px';
-                
-                // Forza il rendering con il nuovo stile
-                setTimeout(() => {
-                    const link = document.createElement('a');
-                    link.download = 'aos_damage_distribution.png';
-                    link.href = canvas.toDataURL();
-                    link.click();
-                    
-                    // Ripristina lo stile originale
-                    canvas.style.backgroundColor = originalBackground;
-                    canvas.style.padding = originalPadding;
-                }, 100);
-            });
-        }
+                // Ripristina lo stile originale
+                canvas.style.backgroundColor = originalBackground;
+                canvas.style.padding = originalPadding;
+                canvas.style.border = originalBorder;
+            }, 100);
+        });
     }
-});
+}
 
 // === PULSANTE AZZERA UNITS ===
 document.getElementById('reset-units').addEventListener('click', function() {
