@@ -1,0 +1,195 @@
+/* ============================================
+   TEMA SCURO WARHAMMER - AoS Damage Simulator
+   ============================================ */
+
+/* Variabili colore tema */
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-card: #1e1e1e;
+    --bg-card-header: #2a2a2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --gold-primary: #bf9b5c;
+    --gold-secondary: #8b7355;
+    --blood-red: #8b0000;
+    --border-color: #3a3a3a;
+    --border-gold: #bf9b5c;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== BACKGROUND PRINCIPALE ===== */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%) !important;
+    border-bottom: 2px solid var(--gold-primary);
+}
+
+.navbar-brand {
+    color: var(--gold-primary) !important;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== CARD PRINCIPALI ===== */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--bg-card-header) 0%, var(--bg-secondary) 100%);
+    border-bottom: 2px solid var(--gold-primary);
+    color: var(--gold-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.profile-card {
+    background-color: #252525;
+    border-left: 4px solid var(--gold-primary) !important;
+    border-radius: 6px;
+}
+
+.profile-card h6 {
+    color: var(--gold-primary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+/* ===== FORM ELEMENTI ===== */
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.form-control, .form-select {
+    background-color: #2a2a2a;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #333333;
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 3px rgba(191, 155, 92, 0.2);
+    color: var(--text-primary);
+}
+
+/* ===== PULSANTI ===== */
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold-primary) 0%, #8b7355 100%);
+    color: #0a0a0a;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d4b37c 0%, #9c8363 100%);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+    color: var(--gold-primary);
+    border: 1px solid var(--gold-primary);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+    color: #d4b37c;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #2a5a2a 0%, #1a3a1a 100%);
+    color: #d4b37c;
+}
+
+/* ===== STATISTICHE CARDS ===== */
+.card.bg-success {
+    background: linear-gradient(135deg, #1a3a1a 0%, #0a2a0a 100%) !important;
+}
+.card.bg-warning {
+    background: linear-gradient(135deg, #8b7355 0%, #6b5345 100%) !important;
+}
+.card.bg-info {
+    background: linear-gradient(135deg, #2a5a6a 0%, #1a3a4a 100%) !important;
+}
+
+.card h3 {
+    color: var(--gold-primary) !important;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* ===== ALERT ===== */
+.alert-danger {
+    background: linear-gradient(135deg, #5a1a1a 0%, #3a0a0a 100%);
+    border: 2px solid #a52a2a;
+    color: var(--text-primary);
+}
+
+.alert-danger .display-4 {
+    color: #a52a2a;
+    font-weight: bold;
+}
+
+/* ===== ACCORDION ===== */
+.accordion-item {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.accordion-button {
+    background-color: #252525;
+    color: var(--gold-primary);
+    font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #2a2a2a;
+    color: #d4b37c;
+}
+
+.accordion-body {
+    background-color: #1a1a1a;
+}
+
+/* ===== GRAFICO ===== */
+#danniChart {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold-secondary);
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-primary);
+}
