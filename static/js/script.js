@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateResults(result, data.ferite_nemiche);
             
         } catch (error) {
-            console.error('Errore:', error);
+            console.error('Error:', error);
             alert('Error during simulation.');
         } finally {
             loadingDiv.style.display = 'none';
@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('conteggio-eliminazione').textContent = `(${eliminazioni}/2000)`;
         
         createChart(distribuzione);
+        addExportButton();  // Aggiungi il pulsante dopo che il grafico è visibile
     }
     
     function createChart(distribuzione) {
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Percentuale (%)',
+                    label: 'Percentage (%)',
                     data: data,
                     backgroundColor: 'rgba(191, 155, 92, 0.7)',
                     borderColor: 'rgba(191, 155, 92, 1)',
@@ -102,34 +103,102 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Percentuale (%)' },
-                        ticks: { callback: function(value) { return value.toFixed(1) + '%'; } }
-                    },
-                    x: { title: { display: true, text: 'Danni inflitti' } }
-                },
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e0e0e0'
+                        }
+                    },
                     tooltip: {
+                        backgroundColor: '#1a1a1a',
+                        titleColor: '#bf9b5c',
+                        bodyColor: '#e0e0e0',
                         callbacks: {
                             label: function(context) {
                                 const danno = parseInt(context.label);
                                 const frequenza = distribuzione[danno] || 0;
                                 return [
-                                    `Percentuale: ${context.raw.toFixed(2)}%`,
-                                    `Frequenza: ${frequenza} volte`,
-                                    `(su 2000 simulazioni)`
+                                    `Percentage: ${context.raw.toFixed(2)}%`,
+                                    `Frequency: ${frequenza} times`,
+                                    `(out of 2000 simulations)`
                                 ];
                             }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Percentage (%)',
+                            color: '#bf9b5c'
+                        },
+                        ticks: {
+                            color: '#e0e0e0',
+                            callback: function(value) {
+                                return value.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Damage inflicted',
+                            color: '#bf9b5c'
+                        },
+                        ticks: {
+                            color: '#e0e0e0',
+                            stepSize: 2,
+                            autoSkip: true
                         }
                     }
                 }
             }
         });
     }
+    
+    // === PULSANTE PER ESPORTARE IL GRAFICO ===
+    function addExportButton() {
+        const chartCard = document.querySelector('.card:has(#danniChart)');
+        if (chartCard && !document.getElementById('export-chart')) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'download-btn-container text-end mt-2';
+            buttonContainer.innerHTML = `
+                <button id="export-chart" class="btn btn-sm btn-outline-gold">
+                    📸 Export Chart as PNG
+                </button>
+            `;
+            chartCard.querySelector('.card-body').appendChild(buttonContainer);
+            
+            document.getElementById('export-chart').addEventListener('click', function() {
+                const canvas = document.getElementById('danniChart');
+                
+                // Salva lo stato corrente del canvas
+                const originalBackground = canvas.style.backgroundColor;
+                const originalPadding = canvas.style.padding;
+                
+                // Applica stile per l'esportazione (sfondo nero, testo bianco)
+                canvas.style.backgroundColor = '#0a0a0a';
+                canvas.style.padding = '15px';
+                
+                // Forza il rendering con il nuovo stile
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.download = 'aos_damage_distribution.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    
+                    // Ripristina lo stile originale
+                    canvas.style.backgroundColor = originalBackground;
+                    canvas.style.padding = originalPadding;
+                }, 100);
+            });
+        }
+    }
 });
 
+// === PULSANTE AZZERA UNITS ===
 document.getElementById('reset-units').addEventListener('click', function() {
     for (let p = 1; p <= 4; p++) {
         const unitsField = document.getElementById(`units_${p}`);
