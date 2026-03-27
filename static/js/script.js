@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateResults(result, data.ferite_nemiche);
             
         } catch (error) {
-            console.error('Errore:', error);
-            alert('Errore durante la simulazione. Assicurati che il server sia in esecuzione.');
+            console.error('Error:', error);
+            alert('Error during simulation. Make sure the server is running.');
         } finally {
             loadingDiv.style.display = 'none';
         }
@@ -288,12 +288,12 @@ document.getElementById('reset-units').addEventListener('click', function() {
     // Feedback visivo
     this.classList.add('btn-success');
     this.classList.remove('btn-secondary');
-    this.innerHTML = '✅ UNITS AZZERATE';
+    this.innerHTML = '✅ UNITS RESET';
     
     // Dopo 2 secondi, ripristina il pulsante originale
     setTimeout(() => {
         this.classList.remove('btn-success');
         this.classList.add('btn-secondary');
-        this.innerHTML = '🔄 AZZERA UNITS';
+        this.innerHTML = '🔄 RESET UNITS';
     }, 2000);
 });

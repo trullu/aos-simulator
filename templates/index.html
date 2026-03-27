@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AoS Damage Simulator</title>
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS personalizzato tema Warhammer -->
+    <!-- Custom Warhammer theme CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
-    <!-- Chart.js e plugin per zoom -->
+    <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
@@ -31,43 +31,43 @@
         </div>
     </nav>
 
-    <!-- Contenuto principale -->
+    <!-- Main content -->
     <main class="container py-4">
         <div class="row">
             <div class="col-12">
-                <h1 class="mb-4">Simulatore Danni Age of Sigmar</h1>
+                <h1 class="mb-4">Age of Sigmar Damage Simulator</h1>
             </div>
         </div>
 
         <form id="simulation-form">
-            <!-- === PROFILO ATTACCANTE (con sezioni collassabili) === -->
+            <!-- === ATTACKER PROFILE (with collapsible sections) === -->
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">⚔️ Profilo Attaccante</h5>
+                    <h5 class="mb-0">⚔️ Attacker Profile</h5>
                 </div>
                 <div class="card-body">
                     
-                    <!-- Profilo 1 - Sempre visibile -->
+                    <!-- Profile 1 - Always visible -->
                     <div class="profile-card p-3 mb-3">
-                        <h6 class="mb-3">Profilo 1 (principale)</h6>
+                        <h6 class="mb-3">Profile 1 (main)</h6>
                         <div class="row">
                             <div class="col-md-2">
-                                <label class="form-label">Units:</label>
+                                <label class="form-label">Models:</label>
                                 <input type="number" class="form-control" id="units_1" value="5" min="0">
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Attacchi/mod:</label>
+                                <label class="form-label">Attacks/model:</label>
                                 <input type="number" class="form-control" id="attacchi_modello_1" value="2" min="1">
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Campione:</label>
+                                <label class="form-label">Champion:</label>
                                 <select class="form-select" id="campione_1">
                                     <option value="NO" selected>NO</option>
-                                    <option value="SI">SI</option>
+                                    <option value="SI">YES</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Colpire:</label>
+                                <label class="form-label">To Hit:</label>
                                 <select class="form-select" id="colpire_1">
                                     <option value="2">2+</option>
                                     <option value="3" selected>3+</option>
@@ -77,23 +77,23 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Critico:</label>
+                                <label class="form-label">Critical:</label>
                                 <select class="form-select" id="critico_1">
-                                    <option value="Nessuno" selected>Nessuno</option>
-                                    <option value="Mortale">Mortale</option>
+                                    <option value="Nessuno" selected>None</option>
+                                    <option value="Mortale">Mortal</option>
                                     <option value="Auto-Wound">Auto-Wound</option>
-                                    <option value="2 hit">2 hit</option>
+                                    <option value="2 hit">2 hits</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Soglia:</label>
+                                <label class="form-label">Threshold:</label>
                                 <select class="form-select" id="soglia_critico_1">
                                     <option value="6" selected>6+</option>
                                     <option value="5">5+</option>
                                 </select>
                             </div>
                             <div class="col-md-2 mt-2">
-                                <label class="form-label">Ferire:</label>
+                                <label class="form-label">To Wound:</label>
                                 <select class="form-select" id="ferire_1">
                                     <option value="2">2+</option>
                                     <option value="3">3+</option>
@@ -113,7 +113,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2 mt-2">
-                                <label class="form-label">Danno:</label>
+                                <label class="form-label">Damage:</label>
                                 <select class="form-select" id="danno_1">
                                     <option value="1">1</option>
                                     <option value="2" selected>2</option>
@@ -136,36 +136,36 @@
                         </div>
                     </div>
 
-                    <!-- Accordion per profili aggiuntivi -->
+                    <!-- Accordion for additional profiles -->
                     <div class="accordion" id="accordionProfili">
                         
-                        <!-- Profilo 2 -->
+                        <!-- Profile 2 -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading2">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                    <span class="fw-bold">Profilo 2 (opzionale)</span>
+                                    <span class="fw-bold">Profile 2 (optional)</span>
                                 </button>
                             </h2>
                             <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="form-label">Units:</label>
+                                            <label class="form-label">Models:</label>
                                             <input type="number" class="form-control" id="units_2" value="0" min="0">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Attacchi/mod:</label>
+                                            <label class="form-label">Attacks/model:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_2" value="2" min="1">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Campione:</label>
+                                            <label class="form-label">Champion:</label>
                                             <select class="form-select" id="campione_2">
                                                 <option value="NO" selected>NO</option>
-                                                <option value="SI">SI</option>
+                                                <option value="SI">YES</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Colpire:</label>
+                                            <label class="form-label">To Hit:</label>
                                             <select class="form-select" id="colpire_2">
                                                 <option value="2">2+</option>
                                                 <option value="3" selected>3+</option>
@@ -175,23 +175,23 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Critico:</label>
+                                            <label class="form-label">Critical:</label>
                                             <select class="form-select" id="critico_2">
-                                                <option value="Nessuno" selected>Nessuno</option>
-                                                <option value="Mortale">Mortale</option>
+                                                <option value="Nessuno" selected>None</option>
+                                                <option value="Mortale">Mortal</option>
                                                 <option value="Auto-Wound">Auto-Wound</option>
-                                                <option value="2 hit">2 hit</option>
+                                                <option value="2 hit">2 hits</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Soglia:</label>
+                                            <label class="form-label">Threshold:</label>
                                             <select class="form-select" id="soglia_critico_2">
                                                 <option value="6" selected>6+</option>
                                                 <option value="5">5+</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Ferire:</label>
+                                            <label class="form-label">To Wound:</label>
                                             <select class="form-select" id="ferire_2">
                                                 <option value="2">2+</option>
                                                 <option value="3">3+</option>
@@ -211,7 +211,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Danno:</label>
+                                            <label class="form-label">Damage:</label>
                                             <select class="form-select" id="danno_2">
                                                 <option value="1">1</option>
                                                 <option value="2" selected>2</option>
@@ -236,33 +236,33 @@
                             </div>
                         </div>
 
-                        <!-- Profilo 3 -->
+                        <!-- Profile 3 -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading3">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                    <span class="fw-bold">Profilo 3 (opzionale)</span>
+                                    <span class="fw-bold">Profile 3 (optional)</span>
                                 </button>
                             </h2>
                             <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="form-label">Units:</label>
+                                            <label class="form-label">Models:</label>
                                             <input type="number" class="form-control" id="units_3" value="0" min="0">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Attacchi/mod:</label>
+                                            <label class="form-label">Attacks/model:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_3" value="2" min="1">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Campione:</label>
+                                            <label class="form-label">Champion:</label>
                                             <select class="form-select" id="campione_3">
                                                 <option value="NO" selected>NO</option>
-                                                <option value="SI">SI</option>
+                                                <option value="SI">YES</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Colpire:</label>
+                                            <label class="form-label">To Hit:</label>
                                             <select class="form-select" id="colpire_3">
                                                 <option value="2">2+</option>
                                                 <option value="3" selected>3+</option>
@@ -272,23 +272,23 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Critico:</label>
+                                            <label class="form-label">Critical:</label>
                                             <select class="form-select" id="critico_3">
-                                                <option value="Nessuno" selected>Nessuno</option>
-                                                <option value="Mortale">Mortale</option>
+                                                <option value="Nessuno" selected>None</option>
+                                                <option value="Mortale">Mortal</option>
                                                 <option value="Auto-Wound">Auto-Wound</option>
-                                                <option value="2 hit">2 hit</option>
+                                                <option value="2 hit">2 hits</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Soglia:</label>
+                                            <label class="form-label">Threshold:</label>
                                             <select class="form-select" id="soglia_critico_3">
                                                 <option value="6" selected>6+</option>
                                                 <option value="5">5+</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Ferire:</label>
+                                            <label class="form-label">To Wound:</label>
                                             <select class="form-select" id="ferire_3">
                                                 <option value="2">2+</option>
                                                 <option value="3">3+</option>
@@ -308,7 +308,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Danno:</label>
+                                            <label class="form-label">Damage:</label>
                                             <select class="form-select" id="danno_3">
                                                 <option value="1">1</option>
                                                 <option value="2" selected>2</option>
@@ -333,33 +333,33 @@
                             </div>
                         </div>
 
-                        <!-- Profilo 4 -->
+                        <!-- Profile 4 -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading4">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                    <span class="fw-bold">Profilo 4 (opzionale)</span>
+                                    <span class="fw-bold">Profile 4 (optional)</span>
                                 </button>
                             </h2>
                             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionProfili">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="form-label">Units:</label>
+                                            <label class="form-label">Models:</label>
                                             <input type="number" class="form-control" id="units_4" value="0" min="0">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Attacchi/mod:</label>
+                                            <label class="form-label">Attacks/model:</label>
                                             <input type="number" class="form-control" id="attacchi_modello_4" value="2" min="1">
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Campione:</label>
+                                            <label class="form-label">Champion:</label>
                                             <select class="form-select" id="campione_4">
                                                 <option value="NO" selected>NO</option>
-                                                <option value="SI">SI</option>
+                                                <option value="SI">YES</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Colpire:</label>
+                                            <label class="form-label">To Hit:</label>
                                             <select class="form-select" id="colpire_4">
                                                 <option value="2">2+</option>
                                                 <option value="3" selected>3+</option>
@@ -369,23 +369,23 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Critico:</label>
+                                            <label class="form-label">Critical:</label>
                                             <select class="form-select" id="critico_4">
-                                                <option value="Nessuno" selected>Nessuno</option>
-                                                <option value="Mortale">Mortale</option>
+                                                <option value="Nessuno" selected>None</option>
+                                                <option value="Mortale">Mortal</option>
                                                 <option value="Auto-Wound">Auto-Wound</option>
-                                                <option value="2 hit">2 hit</option>
+                                                <option value="2 hit">2 hits</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="form-label">Soglia:</label>
+                                            <label class="form-label">Threshold:</label>
                                             <select class="form-select" id="soglia_critico_4">
                                                 <option value="6" selected>6+</option>
                                                 <option value="5">5+</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Ferire:</label>
+                                            <label class="form-label">To Wound:</label>
                                             <select class="form-select" id="ferire_4">
                                                 <option value="2">2+</option>
                                                 <option value="3">3+</option>
@@ -405,7 +405,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2 mt-2">
-                                            <label class="form-label">Danno:</label>
+                                            <label class="form-label">Damage:</label>
                                             <select class="form-select" id="danno_4">
                                                 <option value="1">1</option>
                                                 <option value="2" selected>2</option>
@@ -433,15 +433,15 @@
                 </div>
             </div>
 
-            <!-- === PROFILO DIFENSORE === -->
+            <!-- === DEFENDER PROFILE === -->
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">🛡️ Profilo Difensore</h5>
+                    <h5 class="mb-0">🛡️ Defender Profile</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="save" class="form-label">Salvezza (Save):</label>
+                            <label for="save" class="form-label">Save:</label>
                             <select class="form-select" id="save" name="save">
                                 <option value="2">2+</option>
                                 <option value="3">3+</option>
@@ -453,7 +453,7 @@
                         <div class="col-md-6">
                             <label for="ward" class="form-label">Ward:</label>
                             <select class="form-select" id="ward" name="ward">
-                                <option value="NO" selected>Nessuno</option>
+                                <option value="NO" selected>None</option>
                                 <option value="4">4+</option>
                                 <option value="5">5+</option>
                                 <option value="6">6+</option>
@@ -463,47 +463,47 @@
                 </div>
             </div>
 
-            <!-- === OBIETTIVO NEMICO === -->
+            <!-- === ENEMY TARGET === -->
             <div class="card mb-4">
                 <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">💀 Obiettivo Nemico</h5>
+                    <h5 class="mb-0">💀 Enemy Target</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="ferite_nemiche" class="form-label">Ferite totali dell'unità nemica:</label>
+                            <label for="ferite_nemiche" class="form-label">Total wounds of the enemy unit:</label>
                             <input type="number" class="form-control" id="ferite_nemiche" value="10" min="1">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottoni di controllo -->
+            <!-- Control buttons -->
             <div class="row mb-4">
                 <div class="col-md-6 text-center">
                     <button type="submit" class="btn btn-primary btn-lg w-100">
-                        🎲 AVVIA SIMULAZIONE (2000 lanci)
+                        🎲 RUN SIMULATION (2000 rolls)
                     </button>
                 </div>
                 <div class="col-md-6 text-center">
                     <button type="button" id="reset-units" class="btn btn-secondary btn-lg w-100">
-                        🔄 AZZERA UNITS
+                        🔄 RESET UNITS
                     </button>
                 </div>
             </div>
         </form>
 
-        <!-- Area risultati (inizialmente nascosta) -->
+        <!-- Results area (initially hidden) -->
         <div id="results" class="mt-5" style="display: none;">
-            <h2 class="mb-4">📊 Risultati Simulazione</h2>
+            <h2 class="mb-4">📊 Simulation Results</h2>
             
-            <!-- Statistiche -->
+            <!-- Statistics -->
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="card bg-success text-white">
                         <div class="card-body text-center">
                             <h3 id="media-danni">0</h3>
-                            <p class="mb-0">Media danni</p>
+                            <p class="mb-0">Average damage</p>
                         </div>
                     </div>
                 </div>
@@ -511,7 +511,7 @@
                     <div class="card bg-warning">
                         <div class="card-body text-center">
                             <h3 id="max-danni">0</h3>
-                            <p class="mb-0">Massimo</p>
+                            <p class="mb-0">Maximum</p>
                         </div>
                     </div>
                 </div>
@@ -519,23 +519,23 @@
                     <div class="card bg-info">
                         <div class="card-body text-center">
                             <h3 id="min-danni">0</h3>
-                            <p class="mb-0">Minimo</p>
+                            <p class="mb-0">Minimum</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Percentuale eliminazione -->
+            <!-- Elimination probability -->
             <div class="alert alert-danger mb-4" role="alert">
-                <h4 class="alert-heading">💀 Probabilità di eliminazione totale</h4>
+                <h4 class="alert-heading">💀 Total elimination probability</h4>
                 <p id="perc-eliminazione" class="display-4">0%</p>
                 <p id="conteggio-eliminazione" class="mb-0"></p>
             </div>
 
-            <!-- Grafico -->
+            <!-- Chart -->
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">📈 Distribuzione percentuale danni</h5>
+                    <h5 class="mb-0">📈 Damage distribution percentage</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="danniChart" width="400" height="200"></canvas>
@@ -543,18 +543,18 @@
             </div>
         </div>
 
-        <!-- Spinner di caricamento -->
+        <!-- Loading spinner -->
         <div id="loading" class="text-center my-5" style="display: none;">
             <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-                <span class="visually-hidden">Caricamento...</span>
+                <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-2">Esecuzione di 2000 simulazioni...</p>
+            <p class="mt-2">Running 2000 simulations...</p>
         </div>
     </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- JavaScript personalizzato -->
+    <!-- Custom JavaScript -->
     <script src="/static/js/script.js"></script>
 </body>
 </html>
