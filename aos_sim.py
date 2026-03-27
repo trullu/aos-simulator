@@ -1,11 +1,10 @@
 import random
-import os
 from fastapi import FastAPI, Body, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-
+import os
 
 app = FastAPI()
 
@@ -59,7 +58,6 @@ def calcola_danno(tipo_danno):
         return 1
 
 def simula_profilo(attacchi, colpire_su, tipo_critico, soglia_critico, ferire_su, rend, danno_input, save_su):
-    # Converti il tipo critico in maiuscolo per sicurezza
     tipo_critico = tipo_critico.upper().strip()
     
     successi_hit = 0
@@ -71,8 +69,6 @@ def simula_profilo(attacchi, colpire_su, tipo_critico, soglia_critico, ferire_su
         hit_roll = random.randint(1, 6)
         if hit_roll >= colpire_su:
             successi_hit += 1
-            
-            # Usa soglia_critico per determinare se è un critico
             if hit_roll >= soglia_critico:
                 if tipo_critico == "MORTALE":
                     critici_mortali += 1
@@ -132,7 +128,6 @@ async def simula(data: dict = Body(...)):
     
     profili = []
     for p in range(1, 5):
-        # Leggi il valore del critico e normalizzalo
         valore_critico = data.get(f"critico_p{p}", "")
         if valore_critico:
             valore_critico = valore_critico.upper().strip()
@@ -145,7 +140,6 @@ async def simula(data: dict = Body(...)):
             else:
                 valore_critico = ""
         
-        # Leggi la soglia del critico (default 6 se non presente)
         soglia_critico = data.get(f"soglia_critico_p{p}", 6)
         
         profilo = {
@@ -162,7 +156,6 @@ async def simula(data: dict = Body(...)):
     risultati = []
     for _ in range(2000):
         danni_totali = 0
-        
         for p in profili:
             if p["attacchi"] > 0:
                 danni_totali += simula_profilo(
@@ -207,8 +200,5 @@ async def simula(data: dict = Body(...)):
     return response
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
-# Force rebuild - 2025-03-27

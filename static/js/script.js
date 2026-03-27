@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsDiv = document.getElementById('results');
     const loadingDiv = document.getElementById('loading');
     let chartInstance = null;
-    let showAverageLine = true;  // Controllo per la linea della media
+    let showAverageLine = true;
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateResults(result, data.ferite_nemiche);
             
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error during simulation. Make sure the server is running.');
+            console.error('Errore:', error);
+            alert('Errore durante la simulazione. Assicurati che il server sia in esecuzione.');
         } finally {
             loadingDiv.style.display = 'none';
         }
@@ -72,28 +72,22 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('perc-eliminazione').textContent = percEliminazione + '%';
         document.getElementById('conteggio-eliminazione').textContent = `(${eliminazioni}/2000)`;
         
-        // Passa la media al grafico per la linea
         createChart(distribuzione, media);
-        
-        // Aggiungi il pulsante di download dopo che il grafico è visibile
         addDownloadButton();
     }
     
     function createChart(distribuzione, mediaDanni = null) {
         const ctx = document.getElementById('danniChart').getContext('2d');
         
-        // Trova il valore massimo di danno che ha una frequenza > 0
         const labels = [];
         const data = [];
         let maxDanno = 0;
         
-        // Estrai tutte le chiavi (danni) dalla distribuzione e trova il massimo
         const danni = Object.keys(distribuzione).map(Number);
         if (danni.length > 0) {
             maxDanno = Math.max(...danni);
         }
         
-        // Crea l'array di etichette da 0 a maxDanno
         for (let i = 0; i <= maxDanno; i++) {
             labels.push(i.toString());
             const frequenza = distribuzione[i] || 0;
@@ -101,16 +95,14 @@ document.addEventListener('DOMContentLoaded', function() {
             data.push(percentuale);
         }
         
-        // Distruggi grafico esistente se presente
         if (chartInstance) {
             chartInstance.destroy();
         }
         
-        // Prepara i dataset - INIZIALMENTE SOLO LE BARRE
         const datasets = [{
             label: 'Percentuale (%)',
             data: data,
-            backgroundColor: 'rgba(191, 155, 92, 0.7)',  // Oro Warhammer
+            backgroundColor: 'rgba(191, 155, 92, 0.7)',
             borderColor: 'rgba(191, 155, 92, 1)',
             borderWidth: 1,
             borderRadius: 4,
@@ -118,9 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             categoryPercentage: 0.8
         }];
         
-        // Aggiungi la linea della media SEPARATAMENTE se richiesta e se abbiamo il valore
         if (showAverageLine && mediaDanni !== null && mediaDanni > 0) {
-            // Crea un array con lo stesso numero di elementi di data, tutti uguali alla media
             const mediaData = Array(data.length).fill(mediaDanni);
             datasets.push({
                 label: `Media: ${mediaDanni.toFixed(2)} danni`,
@@ -134,36 +124,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 pointRadius: 0,
                 pointHoverRadius: 0,
                 tension: 0.1,
-                order: 2  // Assicura che la linea sia sopra le barre
+                order: 2
             });
         }
         
-        // Crea nuovo grafico
         chartInstance = new Chart(ctx, {
             type: 'bar',
-            data: {
-                labels: labels,
-                datasets: datasets
-            },
+            data: { labels: labels, datasets: datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false
-                },
+                interaction: { mode: 'index', intersect: false },
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            title: function(context) {
-                                return `Danno: ${context[0].label}`;
-                            },
+                            title: function(context) { return `Danno: ${context[0].label}`; },
                             label: function(context) {
-                                // Se è la linea della media, mostra solo quel valore
                                 if (context.dataset.type === 'line') {
                                     return `${context.dataset.label}: ${context.raw.toFixed(2)} danni`;
                                 }
-                                // Per le barre, mostra percentuale e frequenza
                                 const danno = parseInt(context.label);
                                 const frequenza = distribuzione[danno] || 0;
                                 return [
@@ -173,14 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ];
                             },
                             footer: function(tooltipItems) {
-                                // Solo per le barre, aggiungi un'info extra
                                 const item = tooltipItems[0];
                                 if (item.dataset.type !== 'line') {
                                     const danno = parseInt(item.label);
                                     const frequenza = distribuzione[danno] || 0;
-                                    if (frequenza > 0) {
-                                        return `⬇️ ${frequenza} volte su 2000`;
-                                    }
+                                    if (frequenza > 0) return `⬇️ ${frequenza} volte su 2000`;
                                 }
                                 return '';
                             }
@@ -191,67 +167,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         borderColor: '#bf9b5c',
                         borderWidth: 1
                     },
-                    legend: {
-                        labels: {
-                            color: '#e0e0e0',
-                            font: {
-                                size: 12
-                            }
-                        },
-                        position: 'top'
-                    }
+                    legend: { labels: { color: '#e0e0e0', font: { size: 12 } }, position: 'top' }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Percentuale (%)',
-                            color: '#bf9b5c',
-                            font: {
-                                weight: 'bold',
-                                size: 14
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(191, 155, 92, 0.2)'
-                        },
-                        ticks: {
-                            color: '#e0e0e0',
-                            callback: function(value) {
-                                return value.toFixed(1) + '%';
-                            }
-                        }
+                        title: { display: true, text: 'Percentuale (%)', color: '#bf9b5c', font: { weight: 'bold', size: 14 } },
+                        grid: { color: 'rgba(191, 155, 92, 0.2)' },
+                        ticks: { color: '#e0e0e0', callback: function(value) { return value.toFixed(1) + '%'; } }
                     },
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Danni inflitti',
-                            color: '#bf9b5c',
-                            font: {
-                                weight: 'bold',
-                                size: 14
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(191, 155, 92, 0.2)'
-                        },
-                        ticks: {
-                            color: '#e0e0e0',
-                            stepSize: 2,
-                            autoSkip: true,
-                            maxRotation: 45,
-                            minRotation: 0
-                        }
+                        title: { display: true, text: 'Danni inflitti', color: '#bf9b5c', font: { weight: 'bold', size: 14 } },
+                        grid: { color: 'rgba(191, 155, 92, 0.2)' },
+                        ticks: { color: '#e0e0e0', stepSize: 2, autoSkip: true, maxRotation: 45, minRotation: 0 }
                     }
                 }
             }
         });
     }
     
-    // === PULSANTE PER SCARICARE IL GRAFICO ===
     function addDownloadButton() {
-        // Cerca la card che contiene il grafico
         const chartCard = document.querySelector('.card:has(#danniChart)');
         if (chartCard && !document.getElementById('download-chart')) {
             const buttonContainer = document.createElement('div');
@@ -263,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             chartCard.querySelector('.card-body').appendChild(buttonContainer);
             
-            // Aggiungi l'evento al pulsante
             document.getElementById('download-chart').addEventListener('click', function() {
                 const canvas = document.getElementById('danniChart');
                 const link = document.createElement('a');
@@ -275,25 +209,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// === PULSANTE AZZERA UNITS ===
 document.getElementById('reset-units').addEventListener('click', function() {
-    // Azzera UNITS per tutti e 4 i profili
     for (let p = 1; p <= 4; p++) {
         const unitsField = document.getElementById(`units_${p}`);
-        if (unitsField) {
-            unitsField.value = 0;
-        }
+        if (unitsField) unitsField.value = 0;
     }
-    
-    // Feedback visivo
     this.classList.add('btn-success');
     this.classList.remove('btn-secondary');
-    this.innerHTML = '✅ UNITS RESET';
-    
-    // Dopo 2 secondi, ripristina il pulsante originale
+    this.innerHTML = '✅ UNITS AZZERATE';
     setTimeout(() => {
         this.classList.remove('btn-success');
         this.classList.add('btn-secondary');
-        this.innerHTML = '🔄 RESET UNITS';
+        this.innerHTML = '🔄 AZZERA UNITS';
     }, 2000);
 });
