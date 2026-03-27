@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('conteggio-eliminazione').textContent = `(${eliminazioni}/2000)`;
         
         createChart(distribuzione);
-        addExportButton();  // Aggiungi il pulsante dopo che il grafico è visibile
+        addExportButton();
     }
     
     function createChart(distribuzione) {
@@ -158,65 +158,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // === PULSANTE PER ESPORTARE IL GRAFICO ===
-function addExportButton() {
-    const chartCard = document.querySelector('.card:has(#danniChart)');
-    if (chartCard && !document.getElementById('export-chart')) {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'download-btn-container text-end mt-2';
-        buttonContainer.innerHTML = `
-            <button id="export-chart" class="btn btn-sm btn-outline-gold" style="display: inline-flex; align-items: center; gap: 8px;">
-                <span>📸</span> Export Chart as PNG
-            </button>
-        `;
-        chartCard.querySelector('.card-body').appendChild(buttonContainer);
-        
-        document.getElementById('export-chart').addEventListener('click', function() {
-            const canvas = document.getElementById('danniChart');
+    // === EXPORT CHART BUTTON ===
+    function addExportButton() {
+        const chartCard = document.querySelector('.card:has(#danniChart)');
+        if (chartCard && !document.getElementById('export-chart')) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'download-btn-container text-end mt-2';
+            buttonContainer.innerHTML = `
+                <button id="export-chart" class="btn btn-sm btn-outline-gold" style="display: inline-flex; align-items: center; gap: 8px;">
+                    <span>📸</span> Export Chart as PNG
+                </button>
+            `;
+            chartCard.querySelector('.card-body').appendChild(buttonContainer);
             
-            // Salva lo stato corrente del canvas
-            const originalBackground = canvas.style.backgroundColor;
-            const originalPadding = canvas.style.padding;
-            const originalBorder = canvas.style.border;
-            
-            // Crea un canvas temporaneo per l'esportazione (assicura sfondo nero)
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            // Imposta dimensioni identiche al canvas originale
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            
-            // Riempie con sfondo nero
-            tempCtx.fillStyle = '#0a0a0a';
-            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-            
-            // Disegna il canvas originale sopra
-            tempCtx.drawImage(canvas, 0, 0);
-            
-            // Forza stile per l'esportazione
-            canvas.style.backgroundColor = '#0a0a0a';
-            canvas.style.padding = '15px';
-            canvas.style.border = '1px solid #3a3a3a';
-            
-            // Crea l'immagine dal canvas temporaneo (garantisce sfondo nero)
-            setTimeout(() => {
+            document.getElementById('export-chart').addEventListener('click', function() {
+                const canvas = document.getElementById('danniChart');
+                
+                // Crea un canvas temporaneo per l'esportazione
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                
+                // Sfondo nero
+                tempCtx.fillStyle = '#0a0a0a';
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                // Disegna il grafico sopra
+                tempCtx.drawImage(canvas, 0, 0);
+                
                 const link = document.createElement('a');
                 link.download = 'aos_damage_distribution.png';
-                // Usa il canvas temporaneo per l'esportazione
                 link.href = tempCanvas.toDataURL('image/png');
                 link.click();
-                
-                // Ripristina lo stile originale
-                canvas.style.backgroundColor = originalBackground;
-                canvas.style.padding = originalPadding;
-                canvas.style.border = originalBorder;
-            }, 100);
-        });
+            });
+        }
     }
-}
+});
 
-// === PULSANTE AZZERA UNITS ===
+// === RESET UNITS BUTTON ===
 document.getElementById('reset-units').addEventListener('click', function() {
     for (let p = 1; p <= 4; p++) {
         const unitsField = document.getElementById(`units_${p}`);
